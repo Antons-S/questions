@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Questions\Question;
 
+use App\Enums\Questions\QuestionTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Questions\QuestionType\QuestionType;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,7 +28,7 @@ abstract class QuestionSchema extends Model
 
     protected $casts = [
         self::ID => 'integer',
-        self::TYPE_ID => 'integer', // TODO make enum
+        self::TYPE_ID => QuestionTypeEnum::class,
         self::TITLE => 'string',
         self::TEXT => 'string',
     ];
@@ -42,7 +43,7 @@ abstract class QuestionSchema extends Model
         return $this->getAttribute(self::ID);
     }
 
-    public function getTypeid(): int
+    public function getTypeid(): QuestionTypeEnum
     {
         return $this->getAttribute(self::TYPE_ID);
     }
