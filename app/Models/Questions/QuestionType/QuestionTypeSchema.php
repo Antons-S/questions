@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace App\Models\Questions\QuestionType;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Questions\Question\Question;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin Builder
+ */
 abstract class QuestionTypeSchema extends Model
 {
     use HasFactory;

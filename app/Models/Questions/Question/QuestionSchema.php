@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace App\Models\Questions\Question;
 
-use App\Enums\Questions\QuestionTypeEnum;
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\Questions\QuestionTypeEnum;
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Questions\QuestionType\QuestionType;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin Builder
+ */
 abstract class QuestionSchema extends Model
 {
     use HasFactory;
