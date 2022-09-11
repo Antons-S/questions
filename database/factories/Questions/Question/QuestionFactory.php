@@ -14,8 +14,8 @@ class QuestionFactory extends Factory
     {
         return [
             Question::TYPE_ID => QuestionTypeEnum::GRAPH,
-            Question::TITLE => fake()->words(5, true),
-            Question::TEXT => fake()->words(20, true),
+            Question::TITLE => fake()->words(mt_rand(3, 7), true),
+            Question::TEXT => fake()->words(mt_rand(5, 20), true),
         ];
     }
 
