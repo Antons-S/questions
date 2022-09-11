@@ -4,25 +4,52 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\Questions\Answers;
 
+use App\Models\Questions\Answer\Answer;
+use App\Models\Questions\Question\Question;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AnswerControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testStoreItReturnsCreated(): void
+    public function testStoreSuccess(): void
     {
-        $response = $this->postJson(route('answers.store'));
-        $response->assertStatus(Response::HTTP_CREATED);
+        $now = Carbon::now();
+        Carbon::setTestNow($now);
+
+        $question = Question::factory()->create();
+        $value = fake()->words(mt_rand(5, 15), true);
+
+        $payload = [
+            'question_id' => $question->getId(),
+            'value' => $value,
+        ];
+
+        $this->assertEquals(0, Answer::count());
+
+        $response = $this->postJson(route('answers.store'), $payload);
+        $response->assertCreated();
+
+        $this->assertEquals(1, Answer::count());
+        $this->assertEquals(
+            [
+                'id' => 1,
+                'question_id' => $question->getId(),
+                'value' => $value,
+                'created_at' => $now->startOfSecond()->toISOString(),
+                'updated_at' => $now->startOfSecond()->toISOString(),
+            ],
+            Answer::first()->toArray()
+        );
     }
 
     public function testStoreValidationEmptyPayload(): void
     {
         $response = $this->postJson(route('answers.store'));
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertUnprocessable();
         $response->assertJsonValidationErrors(
             [
                 "question_id" => [
@@ -43,7 +70,7 @@ class AnswerControllerTest extends TestCase
         ];
 
         $response = $this->postJson(route('answers.store'), $payload);
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertUnprocessable();
         $response->assertJsonValidationErrors(
             [
                 "question_id" => [
@@ -64,7 +91,7 @@ class AnswerControllerTest extends TestCase
         ];
 
         $response = $this->postJson(route('answers.store'), $payload);
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertUnprocessable();
         $response->assertJsonValidationErrors(
             [
                 "question_id" => [

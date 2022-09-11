@@ -8,10 +8,14 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Questions\Answers\StoreAnswerRequest;
+use App\Repositories\Questions\Answers\AnswerLogicRepository;
 
 class AnswerController extends Controller
 {
-    // TODO add contructor and inject laravel globals e.g response()
+    // TODO inject laravel globals helper that cointains needed globals e.g response()
+    public function __construct(private readonly AnswerLogicRepository $answerLogicRepository)
+    {
+    }
 
     /**
      * Store new answer
@@ -19,11 +23,13 @@ class AnswerController extends Controller
      * Normally questions would be connected to poll
      * or something else and answers would be saved in bulk
      * but for simplification answers are saved by one
-     *
+     *     *
      * @method POST
      */
     public function store(StoreAnswerRequest $request): JsonResponse
     {
+        /** TODO use DTOs instead of request get @see https://github.com/spatie/data-transfer-object */
+        $this->answerLogicRepository->store($request->get('question_id'), $request->get('value'));
         return response()->json([], Response::HTTP_CREATED);
     }
 }
