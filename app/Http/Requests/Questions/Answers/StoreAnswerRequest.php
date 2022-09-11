@@ -16,9 +16,10 @@ class StoreAnswerRequest extends FormRequest
 
     public function rules(): array
     {
+        // TODO extract hardcoded strings and rules to ValidationHelper
         return [
-            'question_id' => 'required',
-            'value' => 'required',
+            'question_id' => 'required|integer|exists:questions,id',
+            'value' => 'required|string|max:255',
         ];
     }
 }
