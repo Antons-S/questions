@@ -13,6 +13,7 @@ class AnswerFactory extends Factory
     public function definition(): array
     {
         return [
+            Answer::ID => fake()->unique()->numberBetween(1000, 100000),
             Answer::QUESTION_ID => Question::factory(),
             Answer::VALUE => fake()->numberBetween(0, 5),
         ];

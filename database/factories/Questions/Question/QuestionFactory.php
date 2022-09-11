@@ -13,6 +13,7 @@ class QuestionFactory extends Factory
     public function definition(): array
     {
         return [
+            Question::ID => fake()->unique()->numberBetween(1000, 100000),
             Question::TYPE_ID => QuestionTypeEnum::GRAPH,
             Question::TITLE => fake()->words(mt_rand(3, 7), true),
             Question::TEXT => fake()->words(mt_rand(5, 20), true),
