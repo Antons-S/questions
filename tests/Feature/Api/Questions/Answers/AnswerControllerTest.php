@@ -103,4 +103,10 @@ class AnswerControllerTest extends TestCase
             ]
         );
     }
+
+    public function testStatsSuccess(): void
+    {
+        $response = $this->getJson(route('answers.stats'));
+        $response->assertOk();
+    }
 }

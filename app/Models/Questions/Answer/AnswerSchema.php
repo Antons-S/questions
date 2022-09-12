@@ -13,12 +13,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @mixin Builder
  *
- * TODO make separate tables for specific types
- *      for performance and storage saving reasons
+ * TODO make separate tables for specific question types
+ *      for performance, storage saving and convenience reasons
  */
 abstract class AnswerSchema extends Model
 {
     use HasFactory;
+
+    public const GRAPH_VALUE_MIN = 0;
+    public const GRAPH_VALUE_MAX = 5;
 
     /** Model Columns */
     public const ID = 'id';

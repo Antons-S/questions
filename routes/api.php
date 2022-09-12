@@ -24,4 +24,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // TODO put inside auth
 Route::group(['prefix' => 'answers'], function () {
     Route::post('/', [AnswerController::class, 'store'])->name('answers.store');
+    Route::get('/stats', [AnswerController::class, 'getStats'])->name('answers.stats');
 });

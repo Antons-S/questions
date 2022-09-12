@@ -9,10 +9,11 @@ use App\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Questions\Answers\StoreAnswerRequest;
 use App\Repositories\Questions\Answers\AnswerLogicRepository;
+use App\Http\Requests\Questions\Answers\GetAnswersStatsRequest;
 
 class AnswerController extends Controller
 {
-    // TODO inject laravel globals helper that cointains needed globals e.g response()
+    // TODO inject Laravel globals helper that contains needed globals e.g response()
     public function __construct(private readonly AnswerLogicRepository $answerLogicRepository)
     {
     }
@@ -23,7 +24,7 @@ class AnswerController extends Controller
      * Normally questions would be connected to poll
      * or something else and answers would be saved in bulk
      * but for simplification answers are saved by one
-     *     *
+     *
      * @method POST
      */
     public function store(StoreAnswerRequest $request): JsonResponse
@@ -31,5 +32,15 @@ class AnswerController extends Controller
         /** TODO use DTOs instead of request get @see https://github.com/spatie/data-transfer-object */
         $this->answerLogicRepository->store($request->get('question_id'), $request->get('value'));
         return response()->json([], Response::HTTP_CREATED);
+    }
+
+    /**
+     * Get stats about all types of questions
+     *
+     * @method GET
+     */
+    public function getStats(GetAnswersStatsRequest $request): JsonResponse
+    {
+        return response()->json($this->answerLogicRepository->getStats());
     }
 }

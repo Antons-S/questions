@@ -20,4 +20,8 @@ class AnswerDbRepository
             Answer::VALUE => $value,
         ]);
     }
+
+    public function getStats(){
+        
+    }
 }
