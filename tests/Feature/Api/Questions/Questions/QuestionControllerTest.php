@@ -20,8 +20,6 @@ class QuestionControllerTest extends TestCase
 
     public function testSummaryGraphQuestions(): void
     {
-        $this->withoutExceptionHandling();
-
         /** @var Collection<Question> $graphQuestions */
         $graphQuestions = Question::factory(4)->create();
 
@@ -130,5 +128,54 @@ class QuestionControllerTest extends TestCase
         $expectedGraphQuestionsStats = collect($expectedGraphQuestionsStats)->sortBy('question_id')->values()->toArray();
 
         $this->assertEquals($expectedGraphQuestionsStats, $response->json('questions.graphQuestions'));
+    }
+
+    public function testSummaryFreeTextQuestions(): void
+    {
+        /** @var Collection<Question> $freeTextQuestions */
+        $freeTextQuestions = Question::factory(3)->freeText()->create();
+
+        $question2Values = [
+            'aaa aaaaa aaaaaaa   ddddddddd',
+            'bbbb  ddddd',
+            'cccc zzzzzzzzzzzzzz'
+        ];
+        foreach ($question2Values as $value) {
+            $freeTextQuestions[1]->answers()->create([Answer::VALUE => $value]);
+        }
+
+        $question3Values = [
+            'aaa aaaaa aaaaaaa ddddddddd aaa aaaaa aaaaaaa ddddddddd ddddddddd ddddddddd ddddddddd ddddddddd ddddddddd ddddddddd',
+            'cccc zzzzzzzzzzzzzz'
+        ];
+        foreach ($question3Values as $value) {
+            $freeTextQuestions[2]->answers()->create([Answer::VALUE => $value]);
+        }
+
+
+        $response = $this->getJson(route('questions.summary'));
+        $response->assertOk();
+
+        $expectedFreeTextQuestionsStats = [
+            [
+                "question_id" => $freeTextQuestions[0]->getId(),
+                "totalAnswers" => 0,
+                "totalWordCount" => 0
+            ],
+            [
+                "question_id" => $freeTextQuestions[1]->getId(),
+                "totalAnswers" => 3,
+                "totalWordCount" => 8
+            ],
+            [
+                "question_id" => $freeTextQuestions[2]->getId(),
+                "totalAnswers" => 2,
+                "totalWordCount" => 14
+            ]
+        ];
+
+        $expectedFreeTextQuestionsStats = collect($expectedFreeTextQuestionsStats)->sortBy('question_id')->values()->toArray();
+
+        $this->assertEquals($expectedFreeTextQuestionsStats, $response->json('questions.freeTextQuestions'));
     }
 }

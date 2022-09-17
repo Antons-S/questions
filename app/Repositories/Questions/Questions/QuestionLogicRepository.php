@@ -15,11 +15,9 @@ class QuestionLogicRepository
 
     public function getSummary(): QuestionsAnswersSummaryData
     {
-        $graphQuestionSummary = $this->questionDbRepository->getGraphQuestionsSummary();
-
         $summary = new QuestionsAnswersSummaryData();
-        $summary->setGraphQuestionsSummary($graphQuestionSummary);
-
-        return $summary;
+        return $summary
+            ->setGraphQuestionsSummary($this->questionDbRepository->getGraphQuestionsSummary())
+            ->setFreeTextQuestionsSummary($this->questionDbRepository->getFreeTextQuestionsSummary());
     }
 }

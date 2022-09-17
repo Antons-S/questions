@@ -19,6 +19,7 @@ class QuestionsAnswersSummaryResource extends JsonResource
         return [
             'questions' => [
                 'graphQuestions' => $this->resource->getGraphQuestionsSummary(),
+                'freeTextQuestions' => $this->resource->getFreeTextQuestionsSummary(),
             ]
         ];
     }

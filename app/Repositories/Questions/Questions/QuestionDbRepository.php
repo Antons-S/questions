@@ -16,7 +16,7 @@ class QuestionDbRepository
     {
     }
 
-    // TODO reformat, don't return array, may be extract to special class
+    // TODO reformat, may be extract to special class
     public function getGraphQuestionsSummary(): Collection
     {
         $graphQuestions = $this->questionModel->graph()->get();
@@ -55,5 +55,33 @@ class QuestionDbRepository
         });
 
         return $graphQuestionsStats;
+    }
+
+    // TODO reformat, may be extract to special class, Store word count in answers table when answers are splitted to two tables
+    public function getFreeTextQuestionsSummary(): Collection
+    {
+        $freeTextQuestions = $this->questionModel->freeText()->get();
+        $freeTextQuestionsStats = collect();
+        // TODO test performance more
+        $freeTextQuestions->each(function (Question $question) use (&$freeTextQuestionsStats) {
+            $stats = DB::table(Answer::TABLE)
+                ->where(Answer::QUESTION_ID, '=', $question->getId())
+                ->select(
+                    DB::raw('SUM( ROUND ( ( CHAR_LENGTH(value) - CHAR_LENGTH(REPLACE (value, " ", "")) ) / CHAR_LENGTH(" ") ) )AS totalWordCount'), // not 100% precise
+                    DB::raw('COUNT(*) as totalAnswers ')
+                )
+                ->get()
+                ->first();
+
+            $formattedStats = [
+                Answer::QUESTION_ID => $question->getId(),
+                'totalAnswers' => (int)$stats->totalAnswers,
+                'totalWordCount' => (int)$stats->totalWordCount,
+            ];
+
+            $freeTextQuestionsStats->push($formattedStats);
+        });
+
+        return $freeTextQuestionsStats;
     }
 }

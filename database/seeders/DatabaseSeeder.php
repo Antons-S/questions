@@ -16,53 +16,11 @@ class DatabaseSeeder extends Seeder
 
     public function run(int $answersPerQuestion = self::ANSWERS_PER_QUESTION_DEFAULT): void
     {
-        $timeStart = now();
         $graphQuestions = Question::factory(9)->create();
         $freeTextQuestion = Question::factory()->freeText()->create();
 
-        $graphQuestions->each(fn (Question $question) => $this->seedAnswers($question->id, $answersPerQuestion + mt_rand(10,50)));
+        $graphQuestions->each(fn (Question $question) => $this->seedAnswers($question->id, $answersPerQuestion + mt_rand(10, 50)));
         $this->seedAnswers($freeTextQuestion->id, $answersPerQuestion, isFreeText: true);
-
-        dump('Time spent: ' . now()->diffInMilliseconds($timeStart) . 'ms');
-
-        // speed tests
-        // Answer::factory(10000)->create([Answer::QUESTION_ID => 1]); // 16s for 10k
-
-        // foreach (range(1, 10000) as $i) {
-        // Answer::create([
-        //     Answer::QUESTION_ID => 1,
-        //     Answer::VALUE => mt_rand(0, 5), // 16s for 10k
-        // ]);
-
-        // Answer::insert([
-        //     Answer::QUESTION_ID => 1,
-        //     Answer::VALUE => mt_rand(0, 5),
-        //     Answer::CREATED_AT => $timeStart,
-        //     Answer::UPDATED_AT => $timeStart, // 16s for 10k
-        // ]);
-
-        // DB::table('answers')->insert(
-        //     [
-        //         Answer::QUESTION_ID => 1,
-        //         Answer::VALUE => mt_rand(0, 5),
-        //         Answer::CREATED_AT => $timeStart,
-        //         Answer::UPDATED_AT => $timeStart, // 14s for 10k
-        //     ]
-        // );
-        // }
-
-        // collect(range(1, 10000))->chunk(500)->each(function (Collection $chunk) use ($timeStart) {
-        //     $payload = [];
-        //     $chunk->each(function () use ($timeStart, &$payload) {
-        //         $payload[] = [
-        //             Answer::QUESTION_ID => 1,
-        //             Answer::VALUE => mt_rand(0, 5),
-        //             Answer::CREATED_AT => $timeStart,
-        //             Answer::UPDATED_AT => $timeStart,
-        //         ];
-        //     });
-        //     DB::table('answers')->insert($payload); // 294ms for 10k
-        // });
     }
 
     private function seedAnswers(int $questionId, int $amount = 1000, bool $isFreeText = false)
