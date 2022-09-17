@@ -7,5 +7,5 @@ namespace App\Enums\Questions;
 enum QuestionTypeEnum: int
 {
     case GRAPH = 1;
-    case FREEE_TEXT = 2;
+    case FREE_TEXT = 2;
 }

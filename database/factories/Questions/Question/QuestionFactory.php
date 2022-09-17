@@ -23,7 +23,7 @@ class QuestionFactory extends Factory
     public function freeText(): static
     {
         return $this->state(fn (array $attributes) => [
-            Question::TYPE_ID => QuestionTypeEnum::FREEE_TEXT,
+            Question::TYPE_ID => QuestionTypeEnum::FREE_TEXT,
         ]);
     }
 }

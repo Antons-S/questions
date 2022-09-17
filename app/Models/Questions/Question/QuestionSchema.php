@@ -14,11 +14,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
+ * @method Builder graph(); @see QuestionSchema::scopeGraph()
+ * @method Builder freeText(); @see QuestionSchema::scopeFreeText()
+ *
  * @mixin Builder
  */
 abstract class QuestionSchema extends Model
 {
     use HasFactory;
+
+    public const TABLE = 'questions';
 
     /** Model Columns */
     public const ID = 'id';
@@ -41,12 +46,22 @@ abstract class QuestionSchema extends Model
         self::TEXT => 'string',
     ];
 
+    public function scopeGraph($query)
+    {
+        return $query->where(self::TYPE_ID, '=', QuestionTypeEnum::GRAPH);
+    }
+
+    public function scopeFreeText($query)
+    {
+        return $query->where(self::TYPE_ID, '=', QuestionTypeEnum::FREE_TEXT);
+    }
+
     public function getId(): int
     {
         return $this->getAttribute(self::ID);
     }
 
-    public function getTypeid(): QuestionTypeEnum
+    public function getTypeId(): QuestionTypeEnum
     {
         return $this->getAttribute(self::TYPE_ID);
     }

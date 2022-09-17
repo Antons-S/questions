@@ -29,12 +29,15 @@ class AnswerController extends Controller
      */
     public function store(StoreAnswerRequest $request): JsonResponse
     {
-        /** TODO use DTOs instead of request get @see https://github.com/spatie/data-transfer-object */
+        /** TODO use DTO instead of request->get() @see https://github.com/spatie/data-transfer-object */
         $this->answerLogicRepository->store($request->get('question_id'), $request->get('value'));
         return response()->json([], Response::HTTP_CREATED);
     }
 
     /**
+     *
+     * TODO add caching, return resource, move under questions?
+     *
      * Get stats about all types of questions
      *
      * @method GET

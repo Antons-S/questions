@@ -12,16 +12,16 @@ use Illuminate\Support\Collection;
 
 class DatabaseSeeder extends Seeder
 {
-    const ANSWERS_PER_QUESTION = 100000;
+    const ANSWERS_PER_QUESTION_DEFAULT = 100000;
 
-    public function run(): void
+    public function run(int $answersPerQuestion = self::ANSWERS_PER_QUESTION_DEFAULT): void
     {
         $timeStart = now();
         $graphQuestions = Question::factory(9)->create();
         $freeTextQuestion = Question::factory()->freeText()->create();
 
-        $graphQuestions->each(fn (Question $question) => $this->seedAnswers($question->id, self::ANSWERS_PER_QUESTION));
-        $this->seedAnswers($freeTextQuestion->id, self::ANSWERS_PER_QUESTION, isFreeText: true);
+        $graphQuestions->each(fn (Question $question) => $this->seedAnswers($question->id, $answersPerQuestion + mt_rand(10,50)));
+        $this->seedAnswers($freeTextQuestion->id, $answersPerQuestion, isFreeText: true);
 
         dump('Time spent: ' . now()->diffInMilliseconds($timeStart) . 'ms');
 

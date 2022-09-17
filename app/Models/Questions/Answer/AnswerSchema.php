@@ -20,6 +20,8 @@ abstract class AnswerSchema extends Model
 {
     use HasFactory;
 
+    public const TABLE = 'answers';
+
     public const GRAPH_VALUE_MIN = 0;
     public const GRAPH_VALUE_MAX = 5;
 
