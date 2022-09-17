@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Requests\Questions\Questions;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Data\Questions\QuestionsAnswersSummaryData;
+use App\Http\Resources\Questions\Questions\QuestionsAnswersSummaryResource;
 
 class GetQuestionsAnswersSummaryRequest extends FormRequest
 {
@@ -18,5 +20,10 @@ class GetQuestionsAnswersSummaryRequest extends FormRequest
     {
         // TODO add rules for filters and stuff
         return [];
+    }
+
+    public function responseResource(QuestionsAnswersSummaryData $summary): QuestionsAnswersSummaryResource
+    {
+        return new QuestionsAnswersSummaryResource($summary);
     }
 }

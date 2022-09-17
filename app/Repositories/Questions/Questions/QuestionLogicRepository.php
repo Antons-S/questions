@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories\Questions\Questions;
 
+use App\Data\Questions\QuestionsAnswersSummaryData;
 use App\Repositories\Questions\Questions\QuestionDbRepository;
 
 class QuestionLogicRepository
@@ -12,8 +13,13 @@ class QuestionLogicRepository
     {
     }
 
-    public function getSummary()
+    public function getSummary(): QuestionsAnswersSummaryData
     {
-        return $this->questionDbRepository->getSummary();
+        $graphQuestionSummary = $this->questionDbRepository->getGraphQuestionsSummary();
+
+        $summary = new QuestionsAnswersSummaryData();
+        $summary->setGraphQuestionsSummary($graphQuestionSummary);
+
+        return $summary;
     }
 }

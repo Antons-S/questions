@@ -18,14 +18,14 @@ class QuestionController extends Controller
 
     /**
      *
-     * TODO add caching, return resource, move under questions?
+     * TODO add caching
      *
-     * Get stats about all types of questions
+     * Get summary on all types of questions
      *
      * @method GET
      */
     public function getSummary(GetQuestionsAnswersSummaryRequest $request): JsonResponse
     {
-        return response()->json($this->questionLogicRepository->getSummary());
+        return response()->json($request->responseResource($this->questionLogicRepository->getSummary()));
     }
 }

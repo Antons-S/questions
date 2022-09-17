@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Repositories\Questions\Questions;
 
+use stdClass;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use App\Models\Questions\Answer\Answer;
 use App\Models\Questions\Question\Question;
-use stdClass;
 
 class QuestionDbRepository
 {
@@ -16,7 +17,7 @@ class QuestionDbRepository
     }
 
     // TODO reformat, don't return array, may be extract to special class
-    public function getSummary()
+    public function getGraphQuestionsSummary(): Collection
     {
         $graphQuestions = $this->questionModel->graph()->get();
 
@@ -50,13 +51,9 @@ class QuestionDbRepository
             });
 
             $formattedStats['answersPerValue'] = $answersStats;
-            $graphQuestionsStats->push($formattedStats); // 2.2 - 2.3s
+            $graphQuestionsStats->push($formattedStats);
         });
 
-        return [
-            'questions' => [
-                'graphQuestions' => $graphQuestionsStats
-            ]
-        ];
+        return $graphQuestionsStats;
     }
 }
