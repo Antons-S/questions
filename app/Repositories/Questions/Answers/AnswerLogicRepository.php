@@ -17,9 +17,4 @@ class AnswerLogicRepository
     {
         $this->answerDbRepository->store($questionId, $value);
     }
-
-    public function getStats()
-    {
-        return $this->answerDbRepository->getStats();
-    }
 }

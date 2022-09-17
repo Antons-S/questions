@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Questions\Answers\StoreAnswerRequest;
 use App\Repositories\Questions\Answers\AnswerLogicRepository;
-use App\Http\Requests\Questions\Answers\GetAnswersStatsRequest;
 
 class AnswerController extends Controller
 {
@@ -32,18 +31,5 @@ class AnswerController extends Controller
         /** TODO use DTO instead of request->get() @see https://github.com/spatie/data-transfer-object */
         $this->answerLogicRepository->store($request->get('question_id'), $request->get('value'));
         return response()->json([], Response::HTTP_CREATED);
-    }
-
-    /**
-     *
-     * TODO add caching, return resource, move under questions?
-     *
-     * Get stats about all types of questions
-     *
-     * @method GET
-     */
-    public function getStats(GetAnswersStatsRequest $request): JsonResponse
-    {
-        return response()->json($this->answerLogicRepository->getStats());
     }
 }
